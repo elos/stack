@@ -5,8 +5,6 @@ import (
 	"net/http"
 
 	"github.com/elos/data"
-	"github.com/elos/stack/util"
-	"github.com/elos/stack/util/auth"
 	"github.com/elos/transfer"
 	"github.com/julienschmidt/httprouter"
 )
@@ -18,19 +16,19 @@ func Null() httprouter.Handle {
 
 func Error(err error) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		util.ServerError(w, err)
+		transfer.ServerError(w, err)
 	}
 }
 
 func BadMethod() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		util.InvalidMethod(w)
+		transfer.InvalidMethod(w)
 	}
 }
 
 func BadAuth(reason string) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		util.Unauthorized(w)
+		transfer.Unauthorized(w)
 	}
 }
 
@@ -38,7 +36,7 @@ type AuthHandle func(http.ResponseWriter, *http.Request, httprouter.Params, data
 
 func Auth(h AuthHandle, s data.Store) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		agent, authenticated, err := auth.AuthenticateRequest(s, r)
+		agent, authenticated, err := transfer.AuthenticateRequest(s, r)
 		if err != nil {
 			log.Printf("An error occurred during authentication, err: %s", err)
 			// h.NewErrorHandler(err).ServeHTTP(w, r)

@@ -6,8 +6,7 @@ import (
 	"sync"
 
 	"github.com/elos/data"
-	"github.com/elos/stack/util"
-	"github.com/elos/stack/util/auth"
+	"github.com/elos/transfer"
 )
 
 // NullHandler (Testing) {{{
@@ -48,7 +47,7 @@ type ErrorHandler struct {
 
 // implement http.Handler
 func (h *ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	util.ServerError(w, h.Err)
+	transfer.ServerError(w, h.Err)
 }
 
 // Returns a handler capable of serving the error information
@@ -73,7 +72,7 @@ type ResourceHandler struct {
 
 // implements http.Handler
 func (h *ResourceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	util.WriteResourceResponse(w, h.Code, h.Resource)
+	transfer.WriteResourceResponse(w, h.Code, h.Resource)
 }
 
 // Returns a handler capable of serving the resource
@@ -101,7 +100,7 @@ type BadMethodHandler struct {
 
 // implemens http.Handler
 func (h *BadMethodHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	util.InvalidMethod(w)
+	transfer.InvalidMethod(w)
 }
 
 // Returns a handler capable of notifying the user of the invalid method
@@ -128,7 +127,7 @@ type UnauthorizedHandler struct {
 
 // implements http.Handler
 func (h *UnauthorizedHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	util.Unauthorized(w)
+	transfer.Unauthorized(w)
 }
 
 // Returns a handler capable of serving the unauthorized error
@@ -142,7 +141,7 @@ func NewUnauthorizedHandler(reason string) http.Handler {
 
 // Authenticators {{{
 
-var DefaultAuthenticator auth.RequestAuthenticator = auth.AuthenticateRequest
+var DefaultAuthenticator transfer.RequestAuthenticator = transfer.AuthenticateRequest
 
 // Authenticators }}}
 
@@ -150,13 +149,13 @@ var DefaultAuthenticator auth.RequestAuthenticator = auth.AuthenticateRequest
 
 type AuthenticationHandler struct {
 	data.Store
-	Authenticator          auth.RequestAuthenticator
+	Authenticator          transfer.RequestAuthenticator
 	NewErrorHandler        ErrorHandlerConstructor
 	NewUnauthorizedHandler UnauthorizedHandlerConstructor
 	AuthenticatedHandler   AuthenticatedHandler
 }
 
-func NewAuthenticationHandler(s data.Store, a auth.RequestAuthenticator, eh ErrorHandlerConstructor,
+func NewAuthenticationHandler(s data.Store, a transfer.RequestAuthenticator, eh ErrorHandlerConstructor,
 	uh UnauthorizedHandlerConstructor, t AuthenticatedHandler) http.Handler {
 	foo := &AuthenticationHandler{
 		Authenticator:          a,
