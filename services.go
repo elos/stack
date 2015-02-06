@@ -3,6 +3,7 @@ package stack
 import (
 	"github.com/elos/agents"
 	"github.com/elos/data"
+	"github.com/elos/models"
 	"github.com/elos/models/user"
 )
 
@@ -12,7 +13,7 @@ func SetupServices(s data.Store) {
 	Outfitter = agents.NewOutfitter()
 	go Outfitter.Run()
 
-	iter, err := s.NewQuery(UserKind).Execute()
+	iter, err := s.NewQuery(models.UserKind).Execute()
 	if err != nil {
 	}
 
