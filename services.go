@@ -21,8 +21,12 @@ func SetupServices(s data.Store) {
 
 	for iter.Next(u) {
 		agents.OutfitUser(Outfitter, s, u)
+		access := data.NewAccess(u, s)
+		a := agents.NewActionAgent(access, u)
+		go a.Start()
 	}
 
 	if err := iter.Close(); err != nil {
 	}
+
 }
