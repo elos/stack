@@ -10,7 +10,7 @@ import (
 )
 
 func SetupAgents(s data.Store) {
-	iter, err := s.NewQuery(models.UserKind).Execute()
+	iter, err := s.Query(models.UserKind).Execute()
 
 	if err != nil {
 		log.Print("shit: err: %s", err.Error())

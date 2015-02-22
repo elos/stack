@@ -46,9 +46,9 @@ func Sandbox(s data.Store) {
 	t1.SetID(s.NewID())
 	t2.SetID(s.NewID())
 
-	u.AddTask(t)
-	u.AddTask(t1)
-	u.AddTask(t2)
+	u.IncludeTask(t)
+	u.IncludeTask(t1)
+	u.IncludeTask(t2)
 
 	t1.AddDependency(t)
 	t2.AddDependency(t)
