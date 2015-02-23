@@ -6,8 +6,11 @@ import (
 	"github.com/elos/data"
 	"github.com/elos/models"
 	"github.com/elos/models/action"
+	"github.com/elos/models/class"
 	"github.com/elos/models/event"
 	"github.com/elos/models/fixture"
+	"github.com/elos/models/object"
+	"github.com/elos/models/ontology"
 	"github.com/elos/models/routine"
 	"github.com/elos/models/schedule"
 	"github.com/elos/models/set"
@@ -31,6 +34,9 @@ func SetupStore(addr string) data.Store {
 	db.RegisterKind(models.SetKind, "sets")
 	db.RegisterKind(models.FixtureKind, "fixtures")
 	db.RegisterKind(models.ScheduleKind, "schedules")
+	db.RegisterKind(models.OntologyKind, "ontologies")
+	db.RegisterKind(models.ClassKind, "classes")
+	db.RegisterKind(models.ObjectKind, "objects")
 
 	log.Print("Database connection established")
 
@@ -44,6 +50,9 @@ func SetupStore(addr string) data.Store {
 	s.Register(models.SetKind, set.NewM)
 	s.Register(models.FixtureKind, fixture.NewM)
 	s.Register(models.ScheduleKind, schedule.NewM)
+	s.Register(models.OntologyKind, ontology.NewM)
+	s.Register(models.ClassKind, class.NewM)
+	s.Register(models.ObjectKind, object.NewM)
 
 	return s
 }

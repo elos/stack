@@ -6,7 +6,11 @@ import (
 	"time"
 
 	"github.com/elos/data"
+	"github.com/elos/models"
+	"github.com/elos/models/class"
 	"github.com/elos/models/event"
+	"github.com/elos/models/object"
+	"github.com/elos/models/ontology"
 	"github.com/elos/models/routine"
 	"github.com/elos/models/task"
 	"github.com/elos/models/user"
@@ -81,6 +85,42 @@ func Sandbox(s data.Store) {
 	access.Save(r)
 	access.Save(nextAction)
 	access.Save(u)
+
+	o, _ := ontology.New(s)
+	o.SetID(s.NewID())
+	s.Save(o)
+	o.SetUser(u)
+	s.Save(u)
+
+	c, _ := class.New(s)
+	c.SetName("Measurement")
+	s.Save(c)
+
+	tr := models.Trait{
+		Name: "quantity",
+		Type: "string",
+	}
+
+	c.IncludeTrait(tr)
+	s.Save(c)
+
+	o.IncludeClass(c)
+	s.Save(c)
+	s.Save(o)
+
+	obj, _ := object.New(s)
+	log.Print(obj.SetClass(c))
+	log.Print(s.Save(obj))
+	log.Print(obj.SetTrait(access, "quantity", "1000 ml"))
+	log.Printf("%+v", obj)
+	log.Print(s.Save(obj))
+	o.IncludeObject(obj)
+	s.Save(obj)
+	s.Save(o)
+
+	s.Save(o)
+	s.Save(c)
+	s.Save(obj)
 
 	log.Printf("User id: %s", u.ID())
 	log.Printf("Event id: %s", e.ID())
