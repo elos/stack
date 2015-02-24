@@ -96,7 +96,7 @@ func Sandbox(s data.Store) {
 	c.SetName("Measurement")
 	s.Save(c)
 
-	tr := models.Trait{
+	tr := &models.Trait{
 		Name: "quantity",
 		Type: "string",
 	}
