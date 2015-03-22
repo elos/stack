@@ -24,7 +24,7 @@ func Sandbox(s data.Store) {
 		return
 	}
 
-	u, _ := user.Create(s, data.AttrMap{"name": "Sandy Sandbox"})
+	u, _ := user.CreateAttrs(s, data.AttrMap{"name": "Sandy Sandbox"})
 
 	e, _ := event.New(s)
 
